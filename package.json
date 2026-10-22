@@ -1,0 +1,10 @@
+{
+  "name": "smart-member-checkin-2569",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test:gas": "node tests/gas-harness/run.mjs",
+    "mock:gas": "node tests/gas-harness/server.mjs",
+    "test:load": "node tests/load/run.mjs"
+  }
+}

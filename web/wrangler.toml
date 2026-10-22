@@ -1,0 +1,6 @@
+name = "smart-member-checkin-2569"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-09-01"
+
+# APPS_SCRIPT_URL และ PROXY_KEY ตั้งเป็น secret ใน Cloudflare Pages (Settings → Variables and Secrets)
+# สำหรับเครื่อง dev ใช้ไฟล์ .dev.vars (ดู .dev.vars.example)

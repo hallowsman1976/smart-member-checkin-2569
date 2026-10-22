@@ -1,0 +1,17 @@
+# ข้อมูลสมาชิกจริง (ข้อมูลส่วนบุคคล) ห้าม commit — เก็บไว้นอก repo หรือในโฟลเดอร์ data/
+/*.xlsx
+/*.xls
+/*.csv
+data/
+
+# junction ไปยัง .agents/skills (ติดตั้งใหม่ได้จาก skills-lock.json)
+.claude/skills/
+.claude/settings.local.json
+
+node_modules/
+dist/
+.clasp.json
+.clasprc.json
+.dev.vars
+.wrangler/
+*.local

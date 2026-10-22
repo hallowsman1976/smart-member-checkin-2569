@@ -1,0 +1,7 @@
+# คัดลอกเป็น .dev.vars (ไฟล์นี้ไม่ถูก commit)
+# ใช้ mock /exec บนเครื่อง: npm run mock:gas (ที่ root ของ repo)
+APPS_SCRIPT_URL=http://127.0.0.1:8790/exec
+PROXY_KEY=dev-proxy-key-change-me
+# หรือชี้ไป Apps Script staging:
+# APPS_SCRIPT_URL=https://script.google.com/macros/s/<DEPLOYMENT_ID>/exec
+# PROXY_KEY=<ค่าจาก generateProxyKey() บน staging>
