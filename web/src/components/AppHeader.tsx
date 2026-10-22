@@ -1,4 +1,5 @@
-import { CalendarCheck, LogOut, MapPin, UserRound, Wifi, WifiOff } from 'lucide-react'
+import { CalendarCheckIcon, MapPinIcon, SignOutIcon, UserCircleIcon } from '@phosphor-icons/react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { Button } from '@/components/ui/button'
 import { useConnection } from '@/hooks/useConnection'
 import type { OpenEvent, Station, User } from '@/types/api'
@@ -12,43 +13,57 @@ interface Props {
   onLogout: () => void
 }
 
+/** แถวบน: ชื่อระบบ/งาน ซ้าย, จุด·ผู้ใช้·การเชื่อมต่อ·ธีม·ออก ขวา — บนมือถือเหลือเฉพาะไอคอน */
 export function AppHeader({ user, station, openEvent, onLogout }: Props) {
   const { online } = useConnection()
   return (
-    <header className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b bg-white px-4 py-2.5 shadow-sm">
-      <div className="mr-auto min-w-0">
-        <div className="text-base font-semibold text-primary">Smart Member Check-in 2569</div>
-        <div className="flex items-center gap-1.5 truncate text-sm text-muted-foreground">
-          <CalendarCheck className="size-4 shrink-0" />
-          {openEvent ? openEvent.eventName : <span className="text-destructive">ยังไม่มีงานประชุมที่เปิดรับลงทะเบียน</span>}
+    <header className="border-b bg-card">
+      <div className="flex h-14 items-center gap-3 px-4">
+        <div className="min-w-0 flex-1">
+          <div className="truncate text-sm font-semibold tracking-tight">Smart Member Check-in 2569</div>
+          <div className="flex items-center gap-1 truncate text-xs text-muted-foreground">
+            <CalendarCheckIcon className="size-3.5 shrink-0" />
+            {openEvent ? (
+              <span className="truncate">{openEvent.eventName}</span>
+            ) : (
+              <span className="truncate text-destructive">ยังไม่มีงานที่เปิดรับลงทะเบียน</span>
+            )}
+          </div>
+        </div>
+
+        {station && (
+          <div className="flex shrink-0 items-center gap-1.5 rounded-md bg-accent px-2.5 py-1 text-sm font-medium text-accent-foreground">
+            <MapPinIcon className="size-4" />
+            <span className="sm:hidden">จุด {station.stationId}</span>
+            <span className="hidden sm:inline">{station.stationName}</span>
+          </div>
+        )}
+
+        <div className="hidden items-center gap-2 text-sm lg:flex" title={ROLE_LABEL[user.role]}>
+          <UserCircleIcon className="size-5 text-muted-foreground" />
+          <div className="leading-tight">
+            <div className="font-medium">{user.fullName}</div>
+            <div className="text-xs text-muted-foreground">{ROLE_LABEL[user.role]}</div>
+          </div>
+        </div>
+
+        <div
+          role="status"
+          aria-label={online ? 'เชื่อมต่อแล้ว' : 'ขาดการเชื่อมต่อ'}
+          title={online ? 'เชื่อมต่อแล้ว' : 'ขาดการเชื่อมต่อ'}
+          className={`flex shrink-0 items-center gap-1.5 text-xs font-medium ${online ? 'text-success' : 'text-destructive'}`}
+        >
+          <span className={`size-2 rounded-full ${online ? 'bg-success' : 'animate-pulse bg-destructive'}`} />
+          <span className="hidden md:inline">{online ? 'ออนไลน์' : 'ออฟไลน์'}</span>
+        </div>
+
+        <div className="flex shrink-0 items-center">
+          <ThemeToggle />
+          <Button variant="ghost" size="icon" onClick={onLogout} aria-label="ออกจากระบบ" title="ออกจากระบบ">
+            <SignOutIcon />
+          </Button>
         </div>
       </div>
-
-      {station && (
-        <div className="flex items-center gap-1.5 rounded-lg bg-secondary px-3 py-1.5 text-sm font-medium">
-          <MapPin className="size-4 text-primary" />
-          {station.stationName} ({station.stationId})
-        </div>
-      )}
-
-      <div className="flex items-center gap-1.5 text-sm">
-        <UserRound className="size-4 text-muted-foreground" />
-        <span className="font-medium">{user.fullName}</span>
-        <span className="text-muted-foreground">· {ROLE_LABEL[user.role]}</span>
-      </div>
-
-      <div
-        role="status"
-        className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${online ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'}`}
-      >
-        {online ? <Wifi className="size-3.5" /> : <WifiOff className="size-3.5" />}
-        {online ? 'เชื่อมต่อแล้ว' : 'ขาดการเชื่อมต่อ'}
-      </div>
-
-      <Button variant="outline" onClick={onLogout}>
-        <LogOut />
-        ออกจากระบบ
-      </Button>
     </header>
   )
 }

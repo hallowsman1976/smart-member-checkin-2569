@@ -1,5 +1,5 @@
 import { useState, type ComponentProps, type ReactNode } from 'react'
-import { Loader2, RefreshCw } from 'lucide-react'
+import { ArrowsClockwiseIcon, CircleNotchIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
@@ -24,7 +24,7 @@ export function RefreshInfo({ updatedAt, loading, onRefresh }: { updatedAt: Date
     <div className="flex items-center gap-2 text-sm text-muted-foreground">
       <span>อัปเดตล่าสุด {updatedAt ? `${formatClock(updatedAt)} น.` : '-'}</span>
       <Button variant="outline" size="sm" onClick={onRefresh} disabled={loading}>
-        <RefreshCw className={loading ? 'animate-spin' : ''} /> รีเฟรช
+        <ArrowsClockwiseIcon className={loading ? 'animate-spin' : ''} /> รีเฟรช
       </Button>
     </div>
   )
@@ -34,7 +34,7 @@ export function Notice({ tone, children }: { tone: 'success' | 'error' | 'info';
   const tones = {
     success: 'border-success/40 bg-success/10 text-success',
     error: 'border-destructive/40 bg-destructive/10 text-destructive',
-    info: 'border-primary/30 bg-sky-50 text-primary',
+    info: 'border-primary/30 bg-accent text-primary',
   }
   return (
     <div role={tone === 'error' ? 'alert' : 'status'} className={cn('rounded-lg border px-3 py-2 text-sm', tones[tone])}>
@@ -58,7 +58,7 @@ export function LoadState({ loading, error, empty, onRetry }: { loading: boolean
   if (loading)
     return (
       <div className="flex items-center justify-center gap-2 py-10 text-muted-foreground">
-        <Loader2 className="animate-spin" /> กำลังโหลด…
+        <CircleNotchIcon className="animate-spin" /> กำลังโหลด…
       </div>
     )
   if (empty) return <p className="py-10 text-center text-muted-foreground">ไม่มีข้อมูล</p>
@@ -76,15 +76,15 @@ export function Field({ id, label, children, hint }: { id: string; label: string
 }
 
 export const selectClass =
-  'h-8 w-full rounded-lg border border-input bg-white px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50'
+  'h-8 w-full rounded-lg border border-input bg-card px-2.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50'
 
 export function StatusPill({ tone, children }: { tone: 'success' | 'warning' | 'danger' | 'muted' | 'info'; children: ReactNode }) {
   const tones = {
     success: 'bg-success/15 text-success',
-    warning: 'bg-warning/30 text-warning-foreground',
+    warning: 'bg-warning/15 text-warning-strong',
     danger: 'bg-destructive/10 text-destructive',
     muted: 'bg-muted text-muted-foreground',
-    info: 'bg-sky-100 text-primary',
+    info: 'bg-accent text-primary',
   }
   return <span className={cn('inline-flex rounded-full px-2 py-0.5 text-xs font-medium whitespace-nowrap', tones[tone])}>{children}</span>
 }
@@ -92,7 +92,7 @@ export function StatusPill({ tone, children }: { tone: 'success' | 'warning' | '
 /** ตารางแบบเรียบง่ายที่เลื่อนแนวนอนได้บนจอแคบ */
 export function Table({ head, children }: { head: ReactNode; children: ReactNode }) {
   return (
-    <div className="overflow-x-auto rounded-xl border bg-white">
+    <div className="overflow-x-auto rounded-xl border bg-card">
       <table className="w-full text-sm">
         <thead className="bg-secondary text-left text-xs text-muted-foreground [&_th]:px-3 [&_th]:py-2 [&_th]:font-medium [&_th]:whitespace-nowrap">
           {head}
@@ -155,7 +155,7 @@ export function FormDialog({
               ยกเลิก
             </Button>
             <Button type="submit" variant={destructive ? 'destructive' : 'default'} disabled={saving}>
-              {saving && <Loader2 className="animate-spin" />}
+              {saving && <CircleNotchIcon className="animate-spin" />}
               {submitLabel}
             </Button>
           </DialogFooter>
@@ -166,5 +166,5 @@ export function FormDialog({
 }
 
 export function TextInput(props: ComponentProps<typeof Input>) {
-  return <Input {...props} className={cn('h-9 bg-white', props.className)} />
+  return <Input {...props} className={cn('h-9 bg-card', props.className)} />
 }

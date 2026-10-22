@@ -1,5 +1,5 @@
 import { useMemo, useState, type FormEvent } from 'react'
-import { Ban, FilePlus2, Loader2 } from 'lucide-react'
+import { CircleNotchIcon, FilePlusIcon, ProhibitIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, Notice, PageHeader, selectClass, TextInput } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
@@ -85,7 +85,7 @@ export function CheckinsAdminPage() {
 
   return (
     <div className="mx-auto grid w-full max-w-5xl gap-6 p-4 lg:grid-cols-2">
-      <section className="rounded-xl border bg-white p-4">
+      <section className="rounded-xl border bg-card p-4">
         <PageHeader title="ยกเลิกการลงทะเบียน" description="ใช้เมื่อเจ้าหน้าที่ลงทะเบียนผิดคน รายการเดิมยังอยู่และลงทะเบียนใหม่ได้" />
         <form className="grid gap-3" onSubmit={submitCancel}>
           <Field id="c-event" label="งานประชุม">
@@ -100,12 +100,12 @@ export function CheckinsAdminPage() {
           </Field>
           {cancelResult && <Notice tone={cancelResult.tone}>{cancelResult.text}</Notice>}
           <Button type="submit" variant="destructive" disabled={cancelling || !cancel.memberId.trim() || !cancel.reason.trim()}>
-            {cancelling ? <Loader2 className="animate-spin" /> : <Ban />} ยกเลิกการลงทะเบียน
+            {cancelling ? <CircleNotchIcon className="animate-spin" /> : <ProhibitIcon />} ยกเลิกการลงทะเบียน
           </Button>
         </form>
       </section>
 
-      <section className="rounded-xl border bg-white p-4">
+      <section className="rounded-xl border bg-card p-4">
         <PageHeader title="นำเข้าใบลงทะเบียนกระดาษ" description="บันทึกตามเวลาจริงบนใบกระดาษ ใช้กฎกันซ้ำเดียวกับจุดลงทะเบียน" />
         <form className="grid gap-3" onSubmit={submitPaper}>
           <Field id="p-event" label="งานประชุม">
@@ -131,7 +131,7 @@ export function CheckinsAdminPage() {
           </Field>
           {paperResult && <Notice tone={paperResult.tone}>{paperResult.text}</Notice>}
           <Button type="submit" disabled={saving || !paper.memberId.trim() || !paper.stationId || !paper.reason.trim()}>
-            {saving ? <Loader2 className="animate-spin" /> : <FilePlus2 />} บันทึกใบลงทะเบียน
+            {saving ? <CircleNotchIcon className="animate-spin" /> : <FilePlusIcon />} บันทึกใบลงทะเบียน
           </Button>
         </form>
       </section>

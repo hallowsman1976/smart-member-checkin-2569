@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { CheckCircle2, Clock, FileText, Users, XCircle } from 'lucide-react'
+import { CheckCircleIcon, ClockIcon, FileTextIcon, UsersIcon, XCircleIcon } from '@phosphor-icons/react'
 import { LoadState, PageHeader, RefreshInfo, StatusPill, Table } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
 import { formatTime, MEMBER_TYPE_LABEL } from '@/lib/format'
@@ -10,7 +10,7 @@ const POLL_MS = 10_000
 function Stat({ label, value, sub, icon, tone = 'default' }: { label: string; value: string; sub?: string; icon: ReactNode; tone?: 'default' | 'success' | 'muted' }) {
   const color = tone === 'success' ? 'text-success' : tone === 'muted' ? 'text-muted-foreground' : 'text-primary'
   return (
-    <div className="rounded-xl border bg-white p-4">
+    <div className="rounded-xl border bg-card p-4">
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <span className={`[&_svg]:size-4 ${color}`}>{icon}</span>
         {label}
@@ -58,13 +58,13 @@ export function DashboardPage() {
       {s && (
         <div className="grid gap-4">
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <Stat label="สมาชิกทั้งหมด" value={n(s.totals.members)} icon={<Users />} sub="เฉพาะที่มีสิทธิ์" />
-            <Stat label="ลงทะเบียนแล้ว" value={n(s.totals.registered)} icon={<CheckCircle2 />} tone="success" sub={`ใบกระดาษ ${n(s.totals.paper)} · ยกเลิก ${n(s.totals.cancelled)}`} />
-            <Stat label="ยังไม่ลงทะเบียน" value={n(s.totals.notRegistered)} icon={<XCircle />} tone="muted" />
-            <Stat label="ความคืบหน้า" value={`${s.totals.percent}%`} icon={<Clock />} />
+            <Stat label="สมาชิกทั้งหมด" value={n(s.totals.members)} icon={<UsersIcon />} sub="เฉพาะที่มีสิทธิ์" />
+            <Stat label="ลงทะเบียนแล้ว" value={n(s.totals.registered)} icon={<CheckCircleIcon />} tone="success" sub={`ใบกระดาษ ${n(s.totals.paper)} · ยกเลิก ${n(s.totals.cancelled)}`} />
+            <Stat label="ยังไม่ลงทะเบียน" value={n(s.totals.notRegistered)} icon={<XCircleIcon />} tone="muted" />
+            <Stat label="ความคืบหน้า" value={`${s.totals.percent}%`} icon={<ClockIcon />} />
           </div>
 
-          <div className="rounded-xl border bg-white p-4">
+          <div className="rounded-xl border bg-card p-4">
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <div className="font-semibold">องค์ประชุม (นับเฉพาะสมาชิกสามัญ)</div>
               <QuorumBadge quorum={s.quorum} />
@@ -76,7 +76,7 @@ export function DashboardPage() {
           </div>
 
           <div className="grid gap-4 lg:grid-cols-2">
-            <div className="rounded-xl border bg-white p-4">
+            <div className="rounded-xl border bg-card p-4">
               <div className="mb-3 font-semibold">ราย Station</div>
               <div className="grid gap-2">
                 {s.byStation.map((st) => (
@@ -99,9 +99,9 @@ export function DashboardPage() {
               </div>
             </div>
 
-            <div className="rounded-xl border bg-white p-4">
+            <div className="rounded-xl border bg-card p-4">
               <div className="mb-3 flex items-center gap-2 font-semibold">
-                <FileText className="size-4" /> รายการล่าสุด
+                <FileTextIcon className="size-4" /> รายการล่าสุด
               </div>
               {s.recent.length === 0 ? (
                 <p className="py-6 text-center text-sm text-muted-foreground">ยังไม่มีการลงทะเบียน</p>

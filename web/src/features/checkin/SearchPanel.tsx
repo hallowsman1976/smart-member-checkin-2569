@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useMemo, useState, type KeyboardEvent } from 'react'
-import { Loader2, RefreshCw, Search, UserX } from 'lucide-react'
+import { ArrowsClockwiseIcon, CircleNotchIcon, MagnifyingGlassIcon, UserMinusIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { formatClock, MEMBER_TYPE_LABEL } from '@/lib/format'
@@ -59,7 +59,7 @@ export const SearchPanel = forwardRef<HTMLInputElement, Props>(function SearchPa
   return (
     <section className="flex min-h-0 flex-col gap-3" aria-label="ค้นหาสมาชิก">
       <div className="relative">
-        <Search className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-muted-foreground" />
+        <MagnifyingGlassIcon className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-muted-foreground" />
         <Input
           ref={inputRef}
           autoFocus
@@ -69,7 +69,7 @@ export const SearchPanel = forwardRef<HTMLInputElement, Props>(function SearchPa
           placeholder="พิมพ์เลขสมาชิก หรือ ชื่อ-นามสกุล"
           aria-label="ค้นหาเลขสมาชิกหรือชื่อ"
           aria-controls="member-results"
-          className="h-14 rounded-xl bg-white pl-11 text-lg"
+          className="h-14 rounded-xl bg-card pl-11 text-lg"
         />
       </div>
 
@@ -80,14 +80,14 @@ export const SearchPanel = forwardRef<HTMLInputElement, Props>(function SearchPa
             : members.error || 'กำลังโหลดรายชื่อสมาชิก…'}
         </span>
         <Button variant="ghost" size="sm" onClick={() => void members.refresh()} disabled={members.loading}>
-          <RefreshCw className={members.loading ? 'animate-spin' : ''} />
+          <ArrowsClockwiseIcon className={members.loading ? 'animate-spin' : ''} />
           รีเฟรชรายชื่อ
         </Button>
       </div>
 
       {!members.items && !members.error && (
         <div className="flex items-center justify-center gap-2 py-10 text-muted-foreground">
-          <Loader2 className="animate-spin" /> กำลังโหลดรายชื่อสมาชิก…
+          <CircleNotchIcon className="animate-spin" /> กำลังโหลดรายชื่อสมาชิก…
         </div>
       )}
       {!members.items && members.error && (
@@ -100,8 +100,8 @@ export const SearchPanel = forwardRef<HTMLInputElement, Props>(function SearchPa
       )}
 
       {members.items && query.trim() !== '' && !pending && results.length === 0 && (
-        <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed bg-white p-6 text-center">
-          <UserX className="size-8 text-muted-foreground" />
+        <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed bg-card p-6 text-center">
+          <UserMinusIcon className="size-8 text-muted-foreground" />
           <p className="font-medium">ไม่พบสมาชิก "{query.trim()}"</p>
           <p className="text-sm text-muted-foreground">
             ลองค้นด้วยเลขสมาชิกหรือนามสกุล หากยังไม่พบ กรุณาส่งสมาชิกไปที่ผู้ดูแลระบบ
@@ -122,8 +122,8 @@ export const SearchPanel = forwardRef<HTMLInputElement, Props>(function SearchPa
                   disabled={disabled}
                   onMouseEnter={() => setHighlight(i)}
                   onClick={() => onSelect(m)}
-                  className={`flex w-full items-center gap-3 rounded-xl border bg-white px-3 py-2.5 text-left transition-colors disabled:opacity-60 ${
-                    selected ? 'border-primary ring-2 ring-primary/30' : active ? 'border-primary/50 bg-sky-50' : 'hover:bg-sky-50'
+                  className={`flex w-full items-center gap-3 rounded-xl border bg-card px-3 py-2.5 text-left transition-colors disabled:opacity-60 ${
+                    selected ? 'border-primary ring-2 ring-primary/30' : active ? 'border-primary/50 bg-accent' : 'hover:bg-accent'
                   }`}
                 >
                   <span className="w-20 shrink-0 font-mono text-sm font-semibold text-primary">{m.memberId}</span>
@@ -140,7 +140,7 @@ export const SearchPanel = forwardRef<HTMLInputElement, Props>(function SearchPa
       )}
 
       {members.items && query.trim() === '' && (
-        <p className="py-6 text-center text-sm text-muted-foreground">
+        <p className="hidden py-6 text-center text-sm text-muted-foreground md:block">
           ใช้ปุ่ม ↑ ↓ เลือกรายชื่อ แล้วกด Enter
         </p>
       )}

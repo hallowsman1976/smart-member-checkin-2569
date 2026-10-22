@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { KeyRound, Loader2 } from 'lucide-react'
+import { CircleNotchIcon, KeyIcon } from '@phosphor-icons/react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -37,7 +37,7 @@ export function ChangePinPage({ fullName, onChanged, onLogout }: Props) {
   }
 
   return (
-    <main className="flex min-h-svh items-center justify-center bg-gradient-to-b from-sky-50 to-white p-4">
+    <main className="flex min-h-svh items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-xl">ตั้ง PIN ใหม่</CardTitle>
@@ -74,7 +74,7 @@ export function ChangePinPage({ fullName, onChanged, onLogout }: Props) {
               </Alert>
             )}
             <Button type="submit" size="xl" disabled={submitting}>
-              {submitting ? <Loader2 className="animate-spin" /> : <KeyRound />}
+              {submitting ? <CircleNotchIcon className="animate-spin" /> : <KeyIcon />}
               บันทึก PIN ใหม่
             </Button>
             <Button type="button" variant="ghost" onClick={onLogout}>

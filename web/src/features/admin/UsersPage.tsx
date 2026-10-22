@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { KeyRound, LockOpen, Pencil, UserPlus } from 'lucide-react'
+import { KeyIcon, LockOpenIcon, PencilSimpleIcon, UserPlusIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, FormDialog, LoadState, PageHeader, RefreshInfo, selectClass, StatusPill, Table, TextInput } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
@@ -53,7 +53,7 @@ export function UsersPage({ currentUserId }: { currentUserId: string }) {
           <>
             <RefreshInfo updatedAt={q.updatedAt} loading={q.loading} onRefresh={() => void q.reload()} />
             <Button onClick={() => setDialog({ kind: 'create', username: '', fullName: '', role: 'STAFF', defaultStationId: '', pin: '' })}>
-              <UserPlus /> เพิ่มผู้ใช้
+              <UserPlusIcon /> เพิ่มผู้ใช้
             </Button>
           </>
         }
@@ -75,11 +75,11 @@ export function UsersPage({ currentUserId }: { currentUserId: string }) {
               </td>
               <td className="text-right whitespace-nowrap">
                 {u.lockedUntil && (
-                  <Button variant="ghost" size="sm" onClick={() => void unlock(u)}><LockOpen /> ปลดล็อก</Button>
+                  <Button variant="ghost" size="sm" onClick={() => void unlock(u)}><LockOpenIcon /> ปลดล็อก</Button>
                 )}
-                <Button variant="ghost" size="sm" onClick={() => setDialog({ kind: 'pin', user: u, pin: '' })}><KeyRound /> รีเซ็ต PIN</Button>
+                <Button variant="ghost" size="sm" onClick={() => setDialog({ kind: 'pin', user: u, pin: '' })}><KeyIcon /> รีเซ็ต PIN</Button>
                 <Button variant="ghost" size="sm" onClick={() => setDialog({ kind: 'edit', user: u, fullName: u.fullName, role: u.role, defaultStationId: u.defaultStationId, active: u.active })}>
-                  <Pencil /> แก้ไข
+                  <PencilSimpleIcon /> แก้ไข
                 </Button>
               </td>
             </tr>

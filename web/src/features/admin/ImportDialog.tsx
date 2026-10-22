@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Loader2, Upload } from 'lucide-react'
+import { CircleNotchIcon, UploadSimpleIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Field, Notice, selectClass } from '@/components/common'
@@ -79,8 +79,8 @@ export function ImportDialog({ open, onClose, onImported }: { open: boolean; onC
           </DialogDescription>
         </DialogHeader>
 
-        <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed bg-white p-4 hover:bg-sky-50">
-          <Upload className="size-6 text-primary" />
+        <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed bg-card p-4 hover:bg-accent">
+          <UploadSimpleIcon className="size-6 text-primary" />
           <span className="text-sm">{file ? file.name : 'เลือกไฟล์ .xlsx หรือ .csv'}</span>
           <input type="file" accept=".xlsx,.xls,.csv" className="sr-only" onChange={(e) => void pick(e.target.files?.[0])} />
         </label>
@@ -113,15 +113,15 @@ export function ImportDialog({ open, onClose, onImported }: { open: boolean; onC
               {warnings.length > 0 && ` · คำเตือน ${warnings.length} แถว`}
             </Notice>
             {preview.issues.length > 0 && (
-              <ul className="max-h-40 overflow-y-auto rounded-lg border bg-white p-2 text-xs">
+              <ul className="max-h-40 overflow-y-auto rounded-lg border bg-card p-2 text-xs">
                 {preview.issues.slice(0, 200).map((i, k) => (
-                  <li key={k} className={i.level === 'error' ? 'text-destructive' : 'text-warning-foreground'}>
+                  <li key={k} className={i.level === 'error' ? 'text-destructive' : 'text-warning-strong'}>
                     แถว {i.row}: {i.message}
                   </li>
                 ))}
               </ul>
             )}
-            <div className="overflow-x-auto rounded-lg border bg-white">
+            <div className="overflow-x-auto rounded-lg border bg-card">
               <table className="w-full text-xs">
                 <thead className="bg-secondary text-left [&_th]:px-2 [&_th]:py-1">
                   <tr><th>เลขสมาชิก</th><th>ชื่อ-นามสกุล</th><th>หน่วยงาน</th><th>ประเภท</th></tr>
@@ -144,7 +144,7 @@ export function ImportDialog({ open, onClose, onImported }: { open: boolean; onC
         <DialogFooter>
           <Button variant="outline" disabled={running} onClick={() => { reset(); onClose() }}>ปิด</Button>
           <Button disabled={!preview || missingRequired || preview.rows.length === 0 || running || !!done} onClick={() => void run()}>
-            {running && <Loader2 className="animate-spin" />}
+            {running && <CircleNotchIcon className="animate-spin" />}
             {progress || `นำเข้า ${preview?.rows.length.toLocaleString('th-TH') ?? 0} ราย`}
           </Button>
         </DialogFooter>

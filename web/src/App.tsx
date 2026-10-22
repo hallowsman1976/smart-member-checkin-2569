@@ -1,5 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import {
+  CalendarDotsIcon,
+  ChartBarIcon,
+  CircleNotchIcon,
+  ClockCounterClockwiseIcon,
+  FileXlsIcon,
+  IdentificationCardIcon,
+  ListChecksIcon,
+  MapPinIcon,
+  MonitorIcon,
+  NotePencilIcon,
+  UserGearIcon,
+  UsersThreeIcon,
+  type Icon,
+} from '@phosphor-icons/react'
 import { AppHeader } from '@/components/AppHeader'
 import { ChangePinPage } from '@/features/auth/ChangePinPage'
 import { LoginPage } from '@/features/auth/LoginPage'
@@ -14,7 +28,7 @@ import { CheckinPage } from '@/features/checkin/CheckinPage'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import { DisplayPage } from '@/features/dashboard/DisplayPage'
 import { HistoryPage } from '@/features/history/HistoryPage'
-import { routesFor, useHashRoute } from '@/lib/route'
+import { routesFor, useHashRoute, type RouteId } from '@/lib/route'
 import { clearSession, loadSession, saveSession, type ClientSession } from '@/lib/session'
 import { api, setApiToken, setUnauthorizedHandler } from '@/services/api'
 import type { LoginData, OpenEvent } from '@/types/api'
@@ -101,7 +115,7 @@ export default function App() {
   if (!checked) {
     return (
       <div className="flex min-h-svh items-center justify-center gap-2 text-muted-foreground">
-        <Loader2 className="animate-spin" /> กำลังตรวจสอบเซสชัน…
+        <CircleNotchIcon className="animate-spin" /> กำลังตรวจสอบเซสชัน…
       </div>
     )
   }
@@ -126,6 +140,20 @@ export default function App() {
   )
 }
 
+const ROUTE_ICONS: Record<RouteId, Icon> = {
+  checkin: IdentificationCardIcon,
+  dashboard: ChartBarIcon,
+  display: MonitorIcon,
+  history: ClockCounterClockwiseIcon,
+  members: UsersThreeIcon,
+  checkins: NotePencilIcon,
+  events: CalendarDotsIcon,
+  users: UserGearIcon,
+  stations: MapPinIcon,
+  reports: FileXlsIcon,
+  audit: ListChecksIcon,
+}
+
 function MainLayout({
   session,
   openEvent,
@@ -145,23 +173,28 @@ function MainLayout({
     <div className="flex min-h-svh flex-col md:h-svh">
       <AppHeader user={session.user} station={session.station} openEvent={openEvent} onLogout={onLogout} />
       {routes.length > 1 && (
-        <nav aria-label="เมนู" className="flex gap-1 overflow-x-auto border-b bg-white px-3">
-          {routes.map((r) => (
-            <a
-              key={r.id}
-              href={`#/${r.id}`}
-              onClick={(e) => {
-                e.preventDefault()
-                navigate(r.id)
-              }}
-              aria-current={route === r.id ? 'page' : undefined}
-              className={`border-b-2 px-3 py-2 text-sm whitespace-nowrap ${
-                route === r.id ? 'border-primary font-semibold text-primary' : 'border-transparent text-muted-foreground hover:text-foreground'
-              }`}
-            >
-              {r.label}
-            </a>
-          ))}
+        <nav aria-label="เมนู" className="flex gap-1 overflow-x-auto border-b bg-card px-2 [scrollbar-width:none]">
+          {routes.map((r) => {
+            const Icon = ROUTE_ICONS[r.id]
+            const current = route === r.id
+            return (
+              <a
+                key={r.id}
+                href={`#/${r.id}`}
+                onClick={(e) => {
+                  e.preventDefault()
+                  navigate(r.id)
+                }}
+                aria-current={current ? 'page' : undefined}
+                className={`flex h-11 shrink-0 items-center gap-1.5 border-b-2 px-3 text-sm whitespace-nowrap transition-colors ${
+                  current ? 'border-primary font-medium text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Icon className={`size-4 ${current ? 'text-primary' : ''}`} weight={current ? 'fill' : 'regular'} />
+                {r.label}
+              </a>
+            )
+          })}
         </nav>
       )}
       {route === 'checkin' ? (

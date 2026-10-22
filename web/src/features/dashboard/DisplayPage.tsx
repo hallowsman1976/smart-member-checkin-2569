@@ -1,4 +1,4 @@
-import { Maximize } from 'lucide-react'
+import { ArrowsOutIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { useApiQuery } from '@/hooks/useApiQuery'
 import { formatClock } from '@/lib/format'
@@ -11,14 +11,14 @@ export function DisplayPage() {
   const n = (v: number) => v.toLocaleString('th-TH')
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-gradient-to-b from-sky-50 to-white p-6 text-center">
+    <div className="flex flex-1 flex-col items-center justify-center gap-8 bg-background p-6 text-center">
       <Button
         variant="ghost"
         size="sm"
         className="self-end"
         onClick={() => void document.documentElement.requestFullscreen?.().catch(() => undefined)}
       >
-        <Maximize /> เต็มจอ
+        <ArrowsOutIcon /> เต็มจอ
       </Button>
       {!s ? (
         <p className="text-2xl text-muted-foreground">{q.error || 'กำลังโหลด…'}</p>
@@ -53,7 +53,7 @@ export function DisplayPage() {
           {s.quorum.threshold > 0 && (
             <div
               className={`rounded-2xl border-4 px-8 py-4 text-[clamp(1.5rem,3.5vw,3rem)] font-bold ${
-                s.quorum.reached ? 'border-success bg-success/10 text-success' : 'border-warning bg-warning/20 text-warning-foreground'
+                s.quorum.reached ? 'border-success bg-success/10 text-success' : 'border-warning bg-warning/15 text-warning-strong'
               }`}
             >
               {s.quorum.reached

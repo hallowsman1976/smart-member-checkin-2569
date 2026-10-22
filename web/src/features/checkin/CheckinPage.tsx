@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { CheckCircle2, Loader2 } from 'lucide-react'
+import { ArrowLeftIcon, CheckCircleIcon, CircleNotchIcon } from '@phosphor-icons/react'
+import { Kbd } from '@/components/Kbd'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { useConnection } from '@/hooks/useConnection'
@@ -49,22 +50,30 @@ export function CheckinPage({ openEvent }: Props) {
   return (
     <main className="flex min-h-0 flex-1 flex-col">
       {!online && (
-        <div role="alert" className="bg-destructive px-4 py-2 text-center font-medium text-white">
+        <div role="alert" className="border-b border-destructive/30 bg-destructive/10 px-4 py-2 text-center text-sm font-medium text-destructive">
           ขาดการเชื่อมต่ออินเทอร์เน็ต — ระบบจะไม่แสดงว่าสำเร็จจนกว่าเซิร์ฟเวอร์ยืนยัน หากล่มนาน ให้ใช้ใบลงทะเบียนกระดาษ
         </div>
       )}
-      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 p-4 md:grid-cols-[minmax(320px,2fr)_3fr] md:grid-rows-[minmax(0,1fr)]">
-        <SearchPanel
-          ref={searchRef}
-          members={members}
-          query={query}
-          onQueryChange={setQuery}
-          selectedId={selectedId}
-          disabled={busy || state.kind === 'unknown'}
-          onSelect={(m) => void flow.select(m)}
-        />
+      {/* มือถือ: แสดงทีละขั้น (ค้นหา → รายละเอียด) · จอกว้าง: สองคอลัมน์คู่กัน */}
+      <div className="grid min-h-0 flex-1 grid-cols-1 gap-4 p-4 md:grid-cols-[minmax(320px,2fr)_3fr] md:grid-rows-[minmax(0,1fr)] md:gap-6 md:p-6">
+        <div className={`min-h-0 flex-col ${state.kind === 'idle' ? 'flex' : 'hidden md:flex'}`}>
+          <SearchPanel
+            ref={searchRef}
+            members={members}
+            query={query}
+            onQueryChange={setQuery}
+            selectedId={selectedId}
+            disabled={busy || state.kind === 'unknown'}
+            onSelect={(m) => void flow.select(m)}
+          />
+        </div>
 
-        <section aria-label="รายละเอียดสมาชิก" className="min-h-0 overflow-y-auto">
+        <section aria-label="รายละเอียดสมาชิก" className={`min-h-0 overflow-y-auto ${state.kind === 'idle' ? 'hidden md:block' : ''}`}>
+          {state.kind !== 'idle' && !busy && state.kind !== 'unknown' && (
+            <Button variant="ghost" size="sm" className="mb-3 -ml-2 md:hidden" onClick={next}>
+              <ArrowLeftIcon /> กลับไปค้นหา
+            </Button>
+          )}
           <DetailPanel
             state={state}
             eventOpen={!!openEvent}
@@ -98,7 +107,7 @@ export function CheckinPage({ openEvent }: Props) {
           )}
           <DialogFooter className="grid grid-cols-2 gap-3 sm:grid-cols-2">
             <Button size="xl" variant="outline" onClick={flow.cancelConfirm}>
-              ยกเลิก (Esc)
+              ยกเลิก <Kbd>Esc</Kbd>
             </Button>
             <Button
               ref={confirmRef}
@@ -107,8 +116,8 @@ export function CheckinPage({ openEvent }: Props) {
               disabled={busy}
               onClick={() => confirmState && void flow.submit(confirmState.member, confirmState.requestId)}
             >
-              {busy ? <Loader2 className="animate-spin" /> : <CheckCircle2 />}
-              ยืนยัน (Enter)
+              {busy ? <CircleNotchIcon className="animate-spin" /> : <CheckCircleIcon />}
+              ยืนยัน <Kbd>Enter</Kbd>
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { MapPinPlus, Pencil } from 'lucide-react'
+import { MapPinPlusIcon, PencilSimpleIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, FormDialog, LoadState, PageHeader, RefreshInfo, StatusPill, Table, TextInput } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
@@ -32,7 +32,7 @@ export function StationsPage() {
         actions={
           <>
             <RefreshInfo updatedAt={q.updatedAt} loading={q.loading} onRefresh={() => void q.reload()} />
-            <Button onClick={() => setForm({ isNew: true, stationId: '', stationName: '', active: true })}><MapPinPlus /> เพิ่มจุด</Button>
+            <Button onClick={() => setForm({ isNew: true, stationId: '', stationName: '', active: true })}><MapPinPlusIcon /> เพิ่มจุด</Button>
           </>
         }
       />
@@ -45,7 +45,7 @@ export function StationsPage() {
               <td>{s.stationName}</td>
               <td>{s.active ? <StatusPill tone="success">เปิด</StatusPill> : <StatusPill tone="muted">ปิด</StatusPill>}</td>
               <td className="text-right">
-                <Button variant="ghost" size="sm" onClick={() => setForm({ isNew: false, ...s })}><Pencil /> แก้ไข</Button>
+                <Button variant="ghost" size="sm" onClick={() => setForm({ isNew: false, ...s })}><PencilSimpleIcon /> แก้ไข</Button>
               </td>
             </tr>
           ))}

@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Loader2, LogIn } from 'lucide-react'
+import { CircleNotchIcon, IdentificationCardIcon, SignInIcon } from '@phosphor-icons/react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -60,15 +61,21 @@ export function LoginPage({ onLoggedIn }: Props) {
   }
 
   return (
-    <main className="flex min-h-svh items-center justify-center bg-gradient-to-b from-sky-50 to-white p-4">
+    <main className="relative flex min-h-svh items-center justify-center bg-background p-4">
+      <div className="absolute top-3 right-3">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-xl text-primary">Smart Member Check-in 2569</CardTitle>
-          <CardDescription>
-            ระบบลงทะเบียนประชุมใหญ่สามัญประจำปี
-            <br />
-            สหกรณ์ออมทรัพย์สาธารณสุขจังหวัดมุกดาหาร จำกัด
-          </CardDescription>
+        <CardHeader className="gap-3">
+          <div className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+            <IdentificationCardIcon className="size-6" weight="fill" />
+          </div>
+          <div className="grid gap-1">
+            <CardTitle className="text-xl tracking-tight">Smart Member Check-in 2569</CardTitle>
+            <CardDescription>
+              ลงทะเบียนประชุมใหญ่สามัญประจำปี · สหกรณ์ออมทรัพย์สาธารณสุขจังหวัดมุกดาหาร จำกัด
+            </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="grid gap-4" noValidate>
@@ -104,7 +111,7 @@ export function LoginPage({ onLoggedIn }: Props) {
                 value={stationId}
                 onChange={(e) => setStationId(e.target.value)}
                 disabled={!stations}
-                className="h-11 rounded-lg border border-input bg-white px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-60"
+                className="h-11 rounded-lg border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:opacity-60"
               >
                 <option value="">{stations ? '— เลือกจุด (เฉพาะเจ้าหน้าที่ลงทะเบียน) —' : 'กำลังโหลด…'}</option>
                 {stations?.map((s) => (
@@ -130,7 +137,7 @@ export function LoginPage({ onLoggedIn }: Props) {
             )}
 
             <Button type="submit" size="xl" disabled={submitting}>
-              {submitting ? <Loader2 className="animate-spin" /> : <LogIn />}
+              {submitting ? <CircleNotchIcon className="animate-spin" /> : <SignInIcon />}
               {submitting ? 'กำลังเข้าสู่ระบบ…' : 'เข้าสู่ระบบ'}
             </Button>
           </form>

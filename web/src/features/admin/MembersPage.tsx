@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { FileUp, Pencil, UserPlus } from 'lucide-react'
+import { FileArrowUpIcon, PencilSimpleIcon, UserPlusIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, FormDialog, LoadState, PageHeader, RefreshInfo, selectClass, StatusPill, Table, TextInput } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
@@ -62,10 +62,10 @@ export function MembersPage() {
           <>
             <RefreshInfo updatedAt={q.updatedAt} loading={q.loading} onRefresh={() => void q.reload()} />
             <Button onClick={() => setDialog({ mode: 'add', form: { ...empty } })}>
-              <UserPlus /> เพิ่มสมาชิก (Walk-in)
+              <UserPlusIcon /> เพิ่มสมาชิก (Walk-in)
             </Button>
             <Button variant="outline" onClick={() => setImportOpen(true)} disabled={eventOpen} title={eventOpen ? 'ปิดงานประชุมก่อนจึงนำเข้าไฟล์ได้' : undefined}>
-              <FileUp /> นำเข้าไฟล์
+              <FileArrowUpIcon /> นำเข้าไฟล์
             </Button>
           </>
         }
@@ -108,7 +108,7 @@ export function MembersPage() {
                     size="sm"
                     onClick={() => setDialog({ mode: 'edit', form: { memberId: m.memberId, fullName: m.fullName, office: m.office, memberType: m.memberType, active: m.active, reason: '' } })}
                   >
-                    <Pencil /> แก้ไข
+                    <PencilSimpleIcon /> แก้ไข
                   </Button>
                 </td>
               </tr>

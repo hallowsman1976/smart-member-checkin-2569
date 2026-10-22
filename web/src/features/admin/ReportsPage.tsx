@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { FileSpreadsheet, FileText, Loader2 } from 'lucide-react'
+import { CircleNotchIcon, FileTextIcon, FileXlsIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, Notice, PageHeader, selectClass } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
@@ -61,7 +61,7 @@ export function ReportsPage() {
   return (
     <div className="mx-auto w-full max-w-2xl p-4">
       <PageHeader title="รายงาน / Export" description="หนึ่งแถวต่อสมาชิก รวมผู้ที่ยังไม่ลงทะเบียน · ข้อความที่ขึ้นต้นด้วย = + - @ จะถูกบันทึกเป็นข้อความ ไม่ใช่สูตร" />
-      <div className="grid gap-4 rounded-xl border bg-white p-4">
+      <div className="grid gap-4 rounded-xl border bg-card p-4">
         <Field id="r-event" label="งานประชุม">
           <select id="r-event" className={`${selectClass} h-9`} value={eventId} onChange={(e) => setEventId(e.target.value)}>
             <option value="">งานที่เปิดอยู่</option>
@@ -72,10 +72,10 @@ export function ReportsPage() {
         </Field>
         <div className="flex flex-wrap gap-2">
           <Button onClick={() => void run('xlsx')} disabled={!!busy}>
-            {busy === 'xlsx' ? <Loader2 className="animate-spin" /> : <FileSpreadsheet />} ดาวน์โหลด Excel (.xlsx)
+            {busy === 'xlsx' ? <CircleNotchIcon className="animate-spin" /> : <FileXlsIcon />} ดาวน์โหลด Excel (.xlsx)
           </Button>
           <Button variant="outline" onClick={() => void run('csv')} disabled={!!busy}>
-            {busy === 'csv' ? <Loader2 className="animate-spin" /> : <FileText />} ดาวน์โหลด CSV
+            {busy === 'csv' ? <CircleNotchIcon className="animate-spin" /> : <FileTextIcon />} ดาวน์โหลด CSV
           </Button>
         </div>
         {result && <Notice tone={result.tone}>{result.text}</Notice>}

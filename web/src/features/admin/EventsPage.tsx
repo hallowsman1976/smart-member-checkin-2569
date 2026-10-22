@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CalendarPlus, Lock, Pencil, Play } from 'lucide-react'
+import { CalendarPlusIcon, LockIcon, PencilSimpleIcon, PlayIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, FormDialog, LoadState, Notice, PageHeader, RefreshInfo, StatusPill, Table, TextInput } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
@@ -53,7 +53,7 @@ export function EventsPage({ onEventChanged }: { onEventChanged: () => void }) {
         actions={
           <>
             <RefreshInfo updatedAt={q.updatedAt} loading={q.loading} onRefresh={() => void q.reload()} />
-            <Button onClick={() => setDialog({ kind: 'edit', eventName: '', eventDate: '', quorumThreshold: '100' })}><CalendarPlus /> สร้างงาน</Button>
+            <Button onClick={() => setDialog({ kind: 'edit', eventName: '', eventDate: '', quorumThreshold: '100' })}><CalendarPlusIcon /> สร้างงาน</Button>
           </>
         }
       />
@@ -70,13 +70,13 @@ export function EventsPage({ onEventChanged }: { onEventChanged: () => void }) {
               <td>{STATUS[e.status]}</td>
               <td className="text-right whitespace-nowrap">
                 <Button variant="ghost" size="sm" onClick={() => setDialog({ kind: 'edit', eventId: e.eventId, eventName: e.eventName, eventDate: e.eventDate, quorumThreshold: String(e.quorumThreshold) })}>
-                  <Pencil /> แก้ไข
+                  <PencilSimpleIcon /> แก้ไข
                 </Button>
                 {e.status === 'OPEN' ? (
-                  <Button variant="destructive" size="sm" onClick={() => setDialog({ kind: 'close', event: e })}><Lock /> ปิดรับลงทะเบียน</Button>
+                  <Button variant="destructive" size="sm" onClick={() => setDialog({ kind: 'close', event: e })}><LockIcon /> ปิดรับลงทะเบียน</Button>
                 ) : (
                   <Button variant="success" size="sm" disabled={hasOpen} title={hasOpen ? 'มีงานที่เปิดอยู่แล้ว' : undefined} onClick={() => setDialog({ kind: 'open', event: e, reason: '' })}>
-                    <Play /> {e.status === 'CLOSED' ? 'เปิดอีกครั้ง' : 'เปิดรับลงทะเบียน'}
+                    <PlayIcon /> {e.status === 'CLOSED' ? 'เปิดอีกครั้ง' : 'เปิดรับลงทะเบียน'}
                   </Button>
                 )}
               </td>
