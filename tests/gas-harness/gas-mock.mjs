@@ -155,6 +155,7 @@ export function createGasGlobals({ properties = {} } = {}) {
     getScriptProperties: () => ({
       getProperty: (k) => (k in props ? props[k] : null),
       setProperty(k, v) { props[k] = String(v); return this; },
+      deleteProperty(k) { delete props[k]; return this; },
       getProperties: () => ({ ...props }),
     }),
   };

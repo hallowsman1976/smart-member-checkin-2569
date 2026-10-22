@@ -216,6 +216,29 @@ function assert(cond, message) { if (!cond) throw new Error(message); }
   });
 }
 
+// ---- Harness-only: กู้บัญชีด้วย resetUserPin ----
+{
+  const { gas, props } = loadGas();
+  gas.console = { ...console, log: () => {} };
+  const call = (action, payload = {}) => gas.handleRequest_({ proxyKey: PROXY_KEY, action, payload });
+  test('[harness] resetUserPin: ปลดล็อก + เปิดใช้งาน + PIN ใหม่ต้องเปลี่ยน, ลบ property หลังใช้', () => {
+    gas.initializeSheets();
+    assert(gas.resetUserPin() === null, 'ไม่ตั้ง property ต้องไม่รีเซ็ต');
+    for (let i = 0; i < 5; i++) call('auth.login', { username: 'admin', pin: '000999' });
+    assert(call('auth.login', { username: 'admin', pin: '000999' }).code === 'PIN_LOCKED', 'จำลองบัญชีถูกล็อกไม่ได้');
+    const users = gas.readTable_('Users');
+    gas.updateObject_(users, gas.findUserByUsername_(users, 'admin')._row, { Active: false });
+
+    props.RESET_PIN_USERNAME = 'ADMIN';
+    const r = gas.resetUserPin();
+    assert(r && /^\d{6}$/.test(r.pin), 'ไม่ได้ PIN ใหม่');
+    assert(!('RESET_PIN_USERNAME' in props), 'ไม่ได้ลบ RESET_PIN_USERNAME');
+    assert(call('auth.login', { username: 'admin', pin: r.pin }).code === 'MUST_CHANGE_PIN', 'login ด้วย PIN ใหม่ไม่ได้');
+    props.RESET_PIN_USERNAME = 'nobody';
+    assert(gas.resetUserPin() === null, 'ชื่อผู้ใช้ที่ไม่มีต้องไม่รีเซ็ต');
+  });
+}
+
 // ---- Harness-only: เตรียม/ล้างข้อมูล load test ----
 {
   const { gas } = loadGas();

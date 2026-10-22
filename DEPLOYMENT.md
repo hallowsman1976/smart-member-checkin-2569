@@ -161,7 +161,18 @@ npm run build && npx wrangler pages deploy dist --project-name smc2569-staging -
 - [ ] "รายงาน" → ดาวน์โหลด Excel และ CSV เก็บไว้ 2 ที่
 - [ ] รัน `removeBackupTrigger`; ทุกเครื่อง Logout
 
-## 7. ข้อจำกัดของแพลตฟอร์มที่ควรรู้
+## 7. กู้บัญชีที่ login ไม่ได้
+
+ใช้เมื่อลืม PIN, บัญชีถูกล็อก หรือไม่มี Admin ที่ใช้งานได้ (ถ้ายังมี Admin ที่ login ได้ ให้ใช้เมนู "ผู้ใช้" → "รีเซ็ต PIN" แทน)
+
+1. Apps Script → ⚙️ Project Settings → Script Properties → เพิ่ม `RESET_PIN_USERNAME` = ชื่อผู้ใช้
+2. ไฟล์ `maintenance.js` → รัน `resetUserPin`
+3. Execution log แสดง PIN ใหม่ บัญชีถูกปลดล็อกและเปิดใช้งาน ผู้ใช้ต้องเปลี่ยน PIN เมื่อ login ครั้งถัดไป
+4. ระบบลบ `RESET_PIN_USERNAME` ให้เอง และบันทึก `PIN_RESET_EDITOR` ใน Audit Log
+
+ถ้ารันโดยไม่ตั้ง property ระบบจะแสดงรายชื่อผู้ดูแลระบบที่มีอยู่ใน log
+
+## 8. ข้อจำกัดของแพลตฟอร์มที่ควรรู้
 
 - ผลวัดบน staging (8 จุด ทุก 15–20 วินาที): ลงทะเบียนได้ ≈ 17 ราย/นาที (1,500 คน ≈ 90 นาที), เจ้าหน้าที่รอ p50 5.8 วินาที แต่ p95 46 วินาที เพราะมีช่วงที่ Google ไม่ตอบราว 1 นาที — ความถูกต้องไม่ได้รับผลกระทบ (ดู [ADR 0004](docs/adr/0004-cloudflare-frontend-with-pages-functions-proxy.md))
 - Apps Script ประมวลผลการลงทะเบียน p50 3 วินาที; อีก 2–4 วินาทีเป็นการ redirect ของ Google ซึ่งควบคุมไม่ได้
