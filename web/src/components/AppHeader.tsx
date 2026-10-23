@@ -19,6 +19,7 @@ export function AppHeader({ user, station, openEvent, onLogout }: Props) {
   return (
     <header className="border-b bg-card">
       <div className="flex h-14 items-center gap-3 px-4">
+        <img src="/logo.webp" alt="MPHSCC" className="size-10 shrink-0 object-contain" />
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm font-semibold tracking-tight">Smart Member Check-in 2569</div>
           <div className="flex items-center gap-1 truncate text-xs text-muted-foreground">

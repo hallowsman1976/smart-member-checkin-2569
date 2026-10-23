@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { CircleNotchIcon, IdentificationCardIcon, SignInIcon } from '@phosphor-icons/react'
+import { CircleNotchIcon, SignInIcon } from '@phosphor-icons/react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -66,10 +66,8 @@ export function LoginPage({ onLoggedIn }: Props) {
         <ThemeToggle />
       </div>
       <Card className="w-full max-w-md">
-        <CardHeader className="gap-3">
-          <div className="flex size-11 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-            <IdentificationCardIcon className="size-6" weight="fill" />
-          </div>
+        <CardHeader className="gap-3 text-center">
+          <img src="/logo.webp" alt="สหกรณ์ออมทรัพย์สาธารณสุขจังหวัดมุกดาหาร จำกัด" className="mx-auto size-28 object-contain" />
           <div className="grid gap-1">
             <CardTitle className="text-xl tracking-tight">Smart Member Check-in 2569</CardTitle>
             <CardDescription>

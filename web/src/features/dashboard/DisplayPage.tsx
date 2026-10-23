@@ -25,6 +25,7 @@ export function DisplayPage() {
       ) : (
         <>
           <div>
+            <img src="/logo.webp" alt="" className="mx-auto mb-4 size-[clamp(6rem,12vw,10rem)] object-contain" />
             <div className="text-[clamp(1.5rem,3vw,2.5rem)] font-semibold text-primary">{s.event?.eventName ?? 'ยังไม่เปิดรับลงทะเบียน'}</div>
             <div className="text-lg text-muted-foreground">สหกรณ์ออมทรัพย์สาธารณสุขจังหวัดมุกดาหาร จำกัด</div>
           </div>
