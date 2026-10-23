@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildImportPreview, guessMapping, parseMemberType, safeCell, toCsv } from './spreadsheet'
+import { buildImportPreview, buildImportTemplate, guessMapping, parseMemberType, parseSpreadsheet, safeCell, toCsv } from './spreadsheet'
 
 describe('safeCell / toCsv', () => {
   it('ใส่ \' นำหน้าค่าที่ขึ้นต้นด้วยอักขระสูตร', () => {
@@ -51,5 +51,29 @@ describe('import', () => {
     const errors = p.issues.filter((i) => i.level === 'error')
     expect(errors.map((e) => e.row)).toEqual([5, 6, 7, 7])
     expect(p.issues.find((i) => i.level === 'warning')).toMatchObject({ row: 4 })
+  })
+})
+
+describe('แม่แบบนำเข้าสมาชิก', () => {
+  const toFile = async (wb: Awaited<ReturnType<typeof buildImportTemplate>>) => {
+    const XLSX = await import('xlsx')
+    return new File([XLSX.write(wb, { type: 'array', bookType: 'xlsx' })], 'template.xlsx')
+  }
+
+  it('หัวคอลัมน์จับคู่ได้ครบ และแม่แบบเปล่าไม่มีแถวข้อมูล', async () => {
+    const sheet = await parseSpreadsheet(await toFile(await buildImportTemplate()))
+    expect(sheet.rows).toHaveLength(0)
+    expect(Object.values(guessMapping(sheet.headers))).toEqual([0, 1, 2, 3])
+  })
+
+  it('กรอกแล้วนำเข้าได้ และคงศูนย์นำหน้า', async () => {
+    const XLSX = await import('xlsx')
+    const wb = await buildImportTemplate()
+    const ws = wb.Sheets['สมาชิก']
+    XLSX.utils.sheet_add_aoa(ws, [['000123', 'นางสาวทดสอบ ระบบ', 'รพ.ทดสอบ', 'สามัญ']], { origin: 'A2' })
+    const sheet = await parseSpreadsheet(await toFile(wb))
+    const preview = buildImportPreview(sheet, guessMapping(sheet.headers))
+    expect(preview.issues).toEqual([])
+    expect(preview.rows).toEqual([{ memberId: '000123', fullName: 'นางสาวทดสอบ ระบบ', office: 'รพ.ทดสอบ', memberType: 'ORDINARY' }])
   })
 })

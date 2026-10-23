@@ -1,10 +1,11 @@
 import { useMemo, useState } from 'react'
-import { FileArrowUpIcon, PencilSimpleIcon, UserPlusIcon } from '@phosphor-icons/react'
+import { DownloadSimpleIcon, FileArrowUpIcon, PencilSimpleIcon, UserPlusIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Field, FormDialog, LoadState, PageHeader, RefreshInfo, selectClass, StatusPill, Table, TextInput } from '@/components/common'
 import { useApiQuery } from '@/hooks/useApiQuery'
 import { MEMBER_TYPE_LABEL } from '@/lib/format'
 import { indexMembers, searchMembers } from '@/lib/search'
+import { downloadImportTemplate } from '@/lib/spreadsheet'
 import { api } from '@/services/api'
 import type { MemberType } from '@/types/api'
 import { ImportDialog } from './ImportDialog'
@@ -66,6 +67,9 @@ export function MembersPage() {
             </Button>
             <Button variant="outline" onClick={() => setImportOpen(true)} disabled={eventOpen} title={eventOpen ? 'ปิดงานประชุมก่อนจึงนำเข้าไฟล์ได้' : undefined}>
               <FileArrowUpIcon /> นำเข้าไฟล์
+            </Button>
+            <Button variant="ghost" onClick={() => void downloadImportTemplate()} title="ดาวน์โหลดแม่แบบ .xlsx สำหรับนำเข้าสมาชิก">
+              <DownloadSimpleIcon /> แม่แบบนำเข้า
             </Button>
           </>
         }

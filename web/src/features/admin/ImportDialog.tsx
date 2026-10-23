@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
-import { CircleNotchIcon, UploadSimpleIcon } from '@phosphor-icons/react'
+import { CircleNotchIcon, DownloadSimpleIcon, UploadSimpleIcon } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Field, Notice, selectClass } from '@/components/common'
 import { MEMBER_TYPE_LABEL } from '@/lib/format'
-import { buildImportPreview, guessMapping, IMPORT_FIELDS, parseSpreadsheet, type ImportField, type ParsedSheet } from '@/lib/spreadsheet'
+import { buildImportPreview, downloadImportTemplate, guessMapping, IMPORT_FIELDS, parseSpreadsheet, type ImportField, type ParsedSheet } from '@/lib/spreadsheet'
 import { api } from '@/services/api'
 
 const BATCH = 500
@@ -78,6 +78,13 @@ export function ImportDialog({ open, onClose, onImported }: { open: boolean; onC
             รองรับ .xlsx และ .csv · เลขสมาชิกที่มีอยู่แล้วจะถูกปรับปรุง ที่ยังไม่มีจะถูกเพิ่ม · ควรจัดคอลัมน์เลขสมาชิกใน Excel เป็น "ข้อความ" ก่อน เพื่อไม่ให้ศูนย์นำหน้าหาย
           </DialogDescription>
         </DialogHeader>
+
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-secondary px-3 py-2 text-sm">
+          <span className="text-muted-foreground">ยังไม่มีไฟล์? ใช้แม่แบบที่จัดคอลัมน์และรูปแบบเลขสมาชิกไว้แล้ว</span>
+          <Button variant="outline" size="sm" onClick={() => void downloadImportTemplate()}>
+            <DownloadSimpleIcon /> ดาวน์โหลดแม่แบบ
+          </Button>
+        </div>
 
         <label className="flex cursor-pointer items-center gap-3 rounded-xl border-2 border-dashed bg-card p-4 hover:bg-accent">
           <UploadSimpleIcon className="size-6 text-primary" />
