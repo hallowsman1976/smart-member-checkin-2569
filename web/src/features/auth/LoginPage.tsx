@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { CircleNotchIcon, SignInIcon } from '@phosphor-icons/react'
+import { CircleNotchIcon, EyeIcon, EyeSlashIcon, SignInIcon } from '@phosphor-icons/react'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
@@ -19,6 +19,7 @@ export function LoginPage({ onLoggedIn }: Props) {
   const [stationsError, setStationsError] = useState('')
   const [username, setUsername] = useState('')
   const [pin, setPin] = useState('')
+  const [showPin, setShowPin] = useState(false)
   const [stationId, setStationId] = useState(loadLastStation)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -46,6 +47,7 @@ export function LoginPage({ onLoggedIn }: Props) {
     const res = await api('auth.login', { username: username.trim(), pin, stationId: stationId || undefined })
     setSubmitting(false)
     setPin('')
+    setShowPin(false)
     if ((res.code === 'OK' || res.code === 'MUST_CHANGE_PIN') && res.data) {
       if (stationId) saveLastStation(stationId)
       onLoggedIn(res.data)
@@ -91,16 +93,31 @@ export function LoginPage({ onLoggedIn }: Props) {
             </div>
             <div className="grid gap-1.5">
               <Label htmlFor="pin">PIN 6 หลัก</Label>
-              <Input
-                id="pin"
-                type="password"
-                inputMode="numeric"
-                autoComplete="current-password"
-                maxLength={6}
-                value={pin}
-                onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
-                className="h-11 text-base tracking-[0.4em]"
-              />
+              <div className="relative">
+                <Input
+                  id="pin"
+                  type={showPin ? 'text' : 'password'}
+                  inputMode="numeric"
+                  autoComplete="current-password"
+                  maxLength={6}
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
+                  className="h-11 pr-11 text-base tracking-[0.4em]"
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setShowPin((v) => !v)}
+                  aria-label={showPin ? 'ซ่อน PIN' : 'แสดง PIN'}
+                  aria-pressed={showPin}
+                  aria-controls="pin"
+                  title={showPin ? 'ซ่อน PIN' : 'แสดง PIN'}
+                  className="absolute top-1/2 right-1.5 -translate-y-1/2 text-muted-foreground"
+                >
+                  {showPin ? <EyeSlashIcon /> : <EyeIcon />}
+                </Button>
+              </div>
             </div>
             <div className="grid gap-1.5">
               <Label htmlFor="station">จุดลงทะเบียน</Label>
