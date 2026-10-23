@@ -68,6 +68,11 @@ class MockSheet {
   }
   getMaxRows() { return this.maxRows; }
   insertRowsAfter(after, n) { this.maxRows += n; }
+  deleteRows(row, n) {
+    if (row < 1 || n < 1 || row + n - 1 > this.maxRows) throw new Error(`invalid deleteRows ${row},${n}`);
+    this.data.splice(row - 1, n);
+    this.maxRows -= n;
+  }
   setFrozenRows() {}
   getRange(row, col, numRows = 1, numCols = 1) {
     if (row < 1 || col < 1 || numRows < 1 || numCols < 1) throw new Error(`invalid range ${row},${col},${numRows},${numCols}`);

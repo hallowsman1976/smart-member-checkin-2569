@@ -239,6 +239,31 @@ function assert(cond, message) { if (!cond) throw new Error(message); }
   });
 }
 
+// ---- Harness-only: ลบแถวว่างด้วย removeBlankRows ----
+{
+  const { gas, spreadsheet } = loadGas();
+  gas.console = { ...console, log: () => {} };
+  test('[harness] removeBlankRows: ลบแถวว่างที่คั่นข้อมูล คงลำดับข้อมูลและจำนวนแถวที่เตรียมไว้', () => {
+    gas.initializeSheets();
+    const sheet = spreadsheet.getSheetByName('Users');
+    const width = sheet.data[0].length;
+    const blank = () => Array(width).fill('');
+    const row = (id) => { const r = blank(); r[0] = id; r[1] = 'u_' + id; return r; };
+    const admin = sheet.data[1];
+    sheet.data = [sheet.data[0], blank(), blank(), admin, blank(), row('U-2'), [' ', ...Array(width - 1).fill('')], row('U-3')];
+    const maxRows = sheet.getMaxRows();
+    const checkinsMax = spreadsheet.getSheetByName('Checkins').getMaxRows();
+
+    const r = gas.removeBlankRows();
+    assert(r.Users.removed === 4 && r.Users.dataRows === 3, JSON.stringify(r.Users));
+    assert(r.Checkins.removed === 0, JSON.stringify(r.Checkins));
+    assert(JSON.stringify(sheet.data.slice(1).map((x) => x[0])) === JSON.stringify([admin[0], 'U-2', 'U-3']), `${sheet.data.map((x) => x[0])}`);
+    assert(sheet.getMaxRows() === maxRows, `maxRows ${sheet.getMaxRows()} != ${maxRows}`);
+    assert(spreadsheet.getSheetByName('Checkins').getMaxRows() === checkinsMax, 'Checkins maxRows เปลี่ยน');
+    assert(gas.removeBlankRows().Users.removed === 0, 'รันซ้ำต้องไม่ลบเพิ่ม');
+  });
+}
+
 // ---- Harness-only: เตรียม/ล้างข้อมูล load test ----
 {
   const { gas } = loadGas();

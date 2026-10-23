@@ -7,6 +7,10 @@
  *   3. ดู PIN ใหม่ใน Execution log (ผู้ใช้ต้องเปลี่ยน PIN เมื่อ login ครั้งถัดไป)
  * ระบบลบ RESET_PIN_USERNAME ทิ้งหลังรีเซ็ต เพื่อไม่ให้รีเซ็ตซ้ำโดยไม่ตั้งใจ
  * ถ้าไม่ได้ตั้ง RESET_PIN_USERNAME จะแสดงรายชื่อผู้ดูแลระบบให้เลือก
+ *
+ * removeBlankRows — ลบแถวว่าง (ทุกคอลัมน์ว่าง) ในชีต Checkins และ Users
+ *   เปิดไฟล์ maintenance.js แล้วรัน removeBlankRows ดูจำนวนที่ลบใน Execution log
+ *   ลบเฉพาะแถวว่างที่คั่นระหว่างข้อมูล แถวว่างท้ายตารางที่ initializeSheets เตรียม format ไว้ยังคงอยู่
  */
 function resetUserPin() {
   const props = PropertiesService.getScriptProperties();
@@ -43,4 +47,42 @@ function resetUserPin() {
   console.log('รีเซ็ตแล้ว: username=' + username + ' (' + user.Role + ') PIN=' + pin +
     ' — บัญชีถูกปลดล็อกและเปิดใช้งาน ผู้ใช้ต้องเปลี่ยน PIN เมื่อ login ครั้งถัดไป');
   return { username: username, pin: pin };
+}
+
+function removeBlankRows() {
+  return withScriptLock_(function () {
+    const ss = getSpreadsheet_();
+    const result = {};
+    [SHEET.CHECKINS, SHEET.USERS].forEach(function (name) {
+      const sheet = getSheet_(name);
+      result[name] = removeBlankRowsIn_(sheet);
+      // เติมแถวที่ลบไปกลับท้ายตาราง แล้วให้ ensureSheet_ ตั้ง format/validation ให้แถวใหม่
+      if (result[name].removed) sheet.insertRowsAfter(sheet.getMaxRows(), result[name].removed);
+      ensureSheet_(ss, name);
+    });
+    SpreadsheetApp.flush();
+    writeAudit_('SYSTEM', 'BLANK_ROWS_REMOVED', 'Sheet', Object.keys(result).join(','), 'ลบแถวว่างจาก Apps Script editor', result);
+    console.log('ลบแถวว่างแล้ว: ' + JSON.stringify(result));
+    return result;
+  });
+}
+
+/** ลบแถวว่างระหว่างข้อมูล (ไล่จากล่างขึ้นบนทีละช่วง) แถวท้ายตารางที่เตรียมไว้ไม่ถูกแตะ */
+function removeBlankRowsIn_(sheet) {
+  const lastRow = sheet.getLastRow();
+  const lastCol = sheet.getLastColumn();
+  let removed = 0;
+  if (lastRow > 1) {
+    const values = sheet.getRange(2, 1, lastRow - 1, lastCol).getValues();
+    const isBlank = function (row) { return row.every(function (v) { return String(v).trim() === ''; }); };
+    for (let i = values.length - 1; i >= 0; i--) {
+      if (!isBlank(values[i])) continue;
+      let start = i;
+      while (start > 0 && isBlank(values[start - 1])) start--;
+      sheet.deleteRows(start + 2, i - start + 1);
+      removed += i - start + 1;
+      i = start;
+    }
+  }
+  return { removed: removed, dataRows: Math.max(sheet.getLastRow() - 1, 0) };
 }
